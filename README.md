@@ -9,16 +9,11 @@ npm install
 npm run dev
 ```
 
-## Instagram live post integration
+## Instagram live post integration (no access token required)
 
-To pull 3-4 latest posts directly from `https://www.instagram.com/shuddharoma.in/`, configure Instagram Graph credentials in a `.env` file:
+The homepage pulls 3-4 latest posts from the public profile `https://www.instagram.com/shuddharoma.in/` through a public RSS bridge (`rsshub`) + JSON converter (`rss2json`).
 
-```bash
-VITE_INSTAGRAM_USER_ID=YOUR_INSTAGRAM_USER_ID
-VITE_INSTAGRAM_ACCESS_TOKEN=YOUR_LONG_LIVED_ACCESS_TOKEN
-```
-
-When these variables are not available (or API access fails), the UI gracefully falls back to curated placeholder posts.
+If public fetch fails (rate limit/network/CORS), the UI gracefully falls back to curated placeholder posts.
 
 ## Conflict check
 
