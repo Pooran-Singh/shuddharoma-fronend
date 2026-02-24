@@ -8,11 +8,3 @@ Premium e-commerce frontend built with React + TypeScript + Tailwind.
 npm install
 npm run dev
 ```
-
-## Conflict check
-
-```bash
-npm run check:conflicts
-```
-
-This scans the repository for unresolved merge markers (`<<<<<<<`, `=======`, `>>>>>>>`).
