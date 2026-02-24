@@ -1,20 +1,37 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getTopInstagramPosts } from '../api/instagram';
 import { SectionTitle } from '../components/SectionTitle';
-import { instagramFallbackPosts, products } from '../mocks/data';
+import { products } from '../mocks/data';
 import { ProductCard } from '../components/ProductCard';
-import type { InstagramPost } from '../types';
+
+const instagramPermalinks = [
+  'https://www.instagram.com/p/DVJWLsGkyDQ/?utm_source=ig_embed&utm_campaign=loading',
+  'https://www.instagram.com/reel/DVI_yezCW5b/?utm_source=ig_embed&utm_campaign=loading',
+  'https://www.instagram.com/p/DVILq6ADKla/?utm_source=ig_embed&utm_campaign=loading',
+];
 
 export const HomePage = () => {
-  const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>(instagramFallbackPosts.slice(0, 4));
-
   useEffect(() => {
-    getTopInstagramPosts(4).then(setInstagramPosts);
-  }, []);
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://www.instagram.com/embed.js"]');
+    const processEmbeds = () => {
+      const maybeWindow = window as Window & {
+        instgrm?: { Embeds?: { process?: () => void } };
+      };
+      maybeWindow.instgrm?.Embeds?.process?.();
+    };
 
-  const topPost = instagramPosts[0];
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.src = 'https://www.instagram.com/embed.js';
+      script.async = true;
+      script.onload = processEmbeds;
+      document.body.appendChild(script);
+      return;
+    }
+
+    processEmbeds();
+  }, []);
 
   return (
     <div className="space-y-20">
@@ -90,43 +107,20 @@ export const HomePage = () => {
 
       <section className="section-wrapper">
         <SectionTitle eyebrow="Instagram" title="@shuddharoma" subtitle="A visual diary of scent, space, and stillness." />
-        {topPost && (
-          <div className="mb-6 overflow-hidden rounded-3xl border border-cream-100 bg-white shadow-luxe">
-            <div className="grid gap-4 p-4 md:grid-cols-[1.3fr_1fr] md:p-6">
-              <img
-                src={topPost.thumbnailUrl ?? topPost.mediaUrl}
-                alt="ShuddhAroma top Instagram post"
-                className="h-64 w-full rounded-2xl object-cover md:h-80"
-              />
-              <div className="flex flex-col justify-center rounded-2xl bg-cream-50 p-5">
-                <p className="text-xs uppercase tracking-[0.2em] text-sandal-500">Top Post from Instagram</p>
-                <h3 className="mt-2 font-heading text-3xl text-forest-700">Latest Brand Highlight</h3>
-                <p className="mt-2 line-clamp-4 text-sm text-slate-600">{topPost.caption}</p>
-                <div className="mt-4 flex gap-4 text-sm text-forest-700">
-                  <span>❤ {topPost.likeCount?.toLocaleString('en-IN') ?? '—'} likes</span>
-                  <span>💬 {topPost.commentsCount?.toLocaleString('en-IN') ?? '—'} comments</span>
-                </div>
-                <a
-                  className="mt-5 w-fit rounded-full border border-forest-700 px-4 py-2 text-xs uppercase tracking-[0.15em] text-forest-700"
-                  href={topPost.permalink}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  View on Instagram
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {instagramPermalinks.map((permalink) => (
+            <div key={permalink} className="overflow-hidden rounded-2xl bg-white p-2 shadow-luxe">
+              <blockquote
+                className="instagram-media"
+                data-instgrm-captioned
+                data-instgrm-permalink={permalink}
+                data-instgrm-version="14"
+              >
+                <a href={permalink} target="_blank" rel="noreferrer">
+                  View this post on Instagram
                 </a>
-              </div>
+              </blockquote>
             </div>
-          </div>
-        )}
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {instagramPosts.map((post) => (
-            <a key={post.id} href={post.permalink} target="_blank" rel="noreferrer" className="group block">
-              <img
-                src={post.thumbnailUrl ?? post.mediaUrl}
-                alt={post.caption.slice(0, 80)}
-                className="aspect-square rounded-xl object-cover transition duration-300 group-hover:opacity-90"
-              />
-            </a>
           ))}
         </div>
       </section>

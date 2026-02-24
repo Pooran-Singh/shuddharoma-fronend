@@ -9,11 +9,11 @@ npm install
 npm run dev
 ```
 
-## Instagram live post integration (no access token required)
+## Instagram embed integration
 
-The homepage pulls 3-4 latest posts from the public profile `https://www.instagram.com/shuddharoma.in/` through a public RSS bridge (`rsshub`) + JSON converter (`rss2json`).
+The homepage uses official Instagram embeds for selected public post/reel URLs from `@shuddharoma.in`.
 
-If public fetch fails (rate limit/network/CORS), the UI gracefully falls back to curated placeholder posts.
+It loads `https://www.instagram.com/embed.js` on the client and renders embed cards directly from permalink blockquotes.
 
 ## Conflict check
 

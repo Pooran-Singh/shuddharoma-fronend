@@ -1,4 +1,4 @@
-import type { InstagramPost, Product, Review } from '../types';
+import type { Product, Review } from '../types';
 
 export const products: Product[] = [
   {
@@ -75,41 +75,4 @@ export const reviews: Review[] = [
   { id: 'r1', productId: '1', author: 'Ananya R.', message: 'Sophisticated and long lasting scent profile.', rating: 5 },
   { id: 'r2', productId: '2', author: 'Kabir M.', message: 'Transforms my living room into a boutique retreat.', rating: 5 },
   { id: 'r3', productId: '3', author: 'Ira S.', message: 'Fresh, green, and never overpowering.', rating: 4 }
-];
-
-export const instagramFallbackPosts: InstagramPost[] = [
-  {
-    id: 'ig-1',
-    caption: 'Evening ritual styling with our signature Monsoon Cedar Candle.',
-    mediaType: 'IMAGE',
-    mediaUrl: 'https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80',
-    permalink: 'https://www.instagram.com/shuddharoma.in/',
-    timestamp: '2026-01-10T09:00:00.000Z',
-    likeCount: 12400,
-    commentsCount: 608,
-  },
-  {
-    id: 'ig-2',
-    caption: 'Textural details from a calm, fragrance-forward corner.',
-    mediaType: 'IMAGE',
-    mediaUrl: 'https://images.unsplash.com/photo-1602872030094-33f283f9fce3?auto=format&fit=crop&w=1200&q=80',
-    permalink: 'https://www.instagram.com/shuddharoma.in/',
-    timestamp: '2026-01-05T09:00:00.000Z',
-  },
-  {
-    id: 'ig-3',
-    caption: 'Warm sandalwood notes and modern Indian interiors.',
-    mediaType: 'IMAGE',
-    mediaUrl: 'https://images.unsplash.com/photo-1512777576243-939fa9e83240?auto=format&fit=crop&w=1200&q=80',
-    permalink: 'https://www.instagram.com/shuddharoma.in/',
-    timestamp: '2026-01-01T09:00:00.000Z',
-  },
-  {
-    id: 'ig-4',
-    caption: 'Serene shelves, curated scents, and soft evening light.',
-    mediaType: 'IMAGE',
-    mediaUrl: 'https://images.unsplash.com/photo-1614036417651-efe5912149d8?auto=format&fit=crop&w=1200&q=80',
-    permalink: 'https://www.instagram.com/shuddharoma.in/',
-    timestamp: '2025-12-28T09:00:00.000Z',
-  },
 ];
