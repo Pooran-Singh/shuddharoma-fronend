@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { SectionTitle } from '../components/SectionTitle';
 import { products } from '../mocks/data';
@@ -11,28 +10,12 @@ const instagramPermalinks = [
   'https://www.instagram.com/p/DVILq6ADKla/?utm_source=ig_embed&utm_campaign=loading',
 ];
 
+const instagramImageFromPermalink = (permalink: string) => {
+  const cleanUrl = permalink.split('?')[0].replace(/\/$/, '');
+  return `${cleanUrl}/media/?size=l`;
+};
+
 export const HomePage = () => {
-  useEffect(() => {
-    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://www.instagram.com/embed.js"]');
-    const processEmbeds = () => {
-      const maybeWindow = window as Window & {
-        instgrm?: { Embeds?: { process?: () => void } };
-      };
-      maybeWindow.instgrm?.Embeds?.process?.();
-    };
-
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.src = 'https://www.instagram.com/embed.js';
-      script.async = true;
-      script.onload = processEmbeds;
-      document.body.appendChild(script);
-      return;
-    }
-
-    processEmbeds();
-  }, []);
-
   return (
     <div className="space-y-20">
       <section className="section-wrapper grid gap-8 rounded-3xl bg-white p-8 shadow-luxe md:grid-cols-2 md:items-center">
@@ -109,18 +92,20 @@ export const HomePage = () => {
         <SectionTitle eyebrow="Instagram" title="@shuddharoma" subtitle="A visual diary of scent, space, and stillness." />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {instagramPermalinks.map((permalink) => (
-            <div key={permalink} className="overflow-hidden rounded-2xl bg-white p-2 shadow-luxe">
-              <blockquote
-                className="instagram-media"
-                data-instgrm-captioned
-                data-instgrm-permalink={permalink}
-                data-instgrm-version="14"
-              >
-                <a href={permalink} target="_blank" rel="noreferrer">
-                  View this post on Instagram
-                </a>
-              </blockquote>
-            </div>
+            <a
+              key={permalink}
+              href={permalink}
+              target="_blank"
+              rel="noreferrer"
+              className="group block overflow-hidden rounded-2xl bg-white p-2 shadow-luxe"
+            >
+              <img
+                src={instagramImageFromPermalink(permalink)}
+                alt="ShuddhAroma Instagram post"
+                loading="lazy"
+                className="aspect-square w-full rounded-xl object-cover transition duration-300 group-hover:scale-[1.02]"
+              />
+            </a>
           ))}
         </div>
       </section>

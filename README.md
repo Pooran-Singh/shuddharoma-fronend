@@ -11,9 +11,9 @@ npm run dev
 
 ## Instagram embed integration
 
-The homepage uses official Instagram embeds for selected public post/reel URLs from `@shuddharoma.in`.
+The homepage uses selected public post/reel URLs from `@shuddharoma.in` and renders image-only tiles (no caption/meta UI) by deriving media URLs from each permalink.
 
-It loads `https://www.instagram.com/embed.js` on the client and renders embed cards directly from permalink blockquotes.
+Each tile links out to the original Instagram post/reel.
 
 ## Conflict check
 
