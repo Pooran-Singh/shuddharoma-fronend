@@ -1,10 +1,21 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getTopInstagramPosts } from '../api/instagram';
 import { SectionTitle } from '../components/SectionTitle';
-import { products } from '../mocks/data';
+import { instagramFallbackPosts, products } from '../mocks/data';
 import { ProductCard } from '../components/ProductCard';
+import type { InstagramPost } from '../types';
 
 export const HomePage = () => {
+  const [instagramPosts, setInstagramPosts] = useState<InstagramPost[]>(instagramFallbackPosts.slice(0, 4));
+
+  useEffect(() => {
+    getTopInstagramPosts(4).then(setInstagramPosts);
+  }, []);
+
+  const topPost = instagramPosts[0];
+
   return (
     <div className="space-y-20">
       <section className="section-wrapper grid gap-8 rounded-3xl bg-white p-8 shadow-luxe md:grid-cols-2 md:items-center">
@@ -79,32 +90,43 @@ export const HomePage = () => {
 
       <section className="section-wrapper">
         <SectionTitle eyebrow="Instagram" title="@shuddharoma" subtitle="A visual diary of scent, space, and stillness." />
-        <div className="mb-6 overflow-hidden rounded-3xl border border-cream-100 bg-white shadow-luxe">
-          <div className="grid gap-4 p-4 md:grid-cols-[1.3fr_1fr] md:p-6">
-            <img
-              src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=1200&q=80"
-              alt="ShuddhAroma top Instagram post"
-              className="h-64 w-full rounded-2xl object-cover md:h-80"
-            />
-            <div className="flex flex-col justify-center rounded-2xl bg-cream-50 p-5">
-              <p className="text-xs uppercase tracking-[0.2em] text-sandal-500">Top Post This Week</p>
-              <h3 className="mt-2 font-heading text-3xl text-forest-700">Evening Ritual Styling</h3>
-              <p className="mt-2 text-sm text-slate-600">
-                A curated bedside mood with our Monsoon Cedar Candle — one of our most-saved posts this week.
-              </p>
-              <div className="mt-4 flex gap-4 text-sm text-forest-700">
-                <span>❤ 12.4k likes</span>
-                <span>💬 608 comments</span>
+        {topPost && (
+          <div className="mb-6 overflow-hidden rounded-3xl border border-cream-100 bg-white shadow-luxe">
+            <div className="grid gap-4 p-4 md:grid-cols-[1.3fr_1fr] md:p-6">
+              <img
+                src={topPost.thumbnailUrl ?? topPost.mediaUrl}
+                alt="ShuddhAroma top Instagram post"
+                className="h-64 w-full rounded-2xl object-cover md:h-80"
+              />
+              <div className="flex flex-col justify-center rounded-2xl bg-cream-50 p-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-sandal-500">Top Post from Instagram</p>
+                <h3 className="mt-2 font-heading text-3xl text-forest-700">Latest Brand Highlight</h3>
+                <p className="mt-2 line-clamp-4 text-sm text-slate-600">{topPost.caption}</p>
+                <div className="mt-4 flex gap-4 text-sm text-forest-700">
+                  <span>❤ {topPost.likeCount?.toLocaleString('en-IN') ?? '—'} likes</span>
+                  <span>💬 {topPost.commentsCount?.toLocaleString('en-IN') ?? '—'} comments</span>
+                </div>
+                <a
+                  className="mt-5 w-fit rounded-full border border-forest-700 px-4 py-2 text-xs uppercase tracking-[0.15em] text-forest-700"
+                  href={topPost.permalink}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  View on Instagram
+                </a>
               </div>
-              <button className="mt-5 w-fit rounded-full border border-forest-700 px-4 py-2 text-xs uppercase tracking-[0.15em] text-forest-700">
-                View on Instagram
-              </button>
             </div>
           </div>
-        </div>
+        )}
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          {products.map((product) => (
-            <img key={product.id} src={product.image} alt={product.name} className="aspect-square rounded-xl object-cover" />
+          {instagramPosts.map((post) => (
+            <a key={post.id} href={post.permalink} target="_blank" rel="noreferrer" className="group block">
+              <img
+                src={post.thumbnailUrl ?? post.mediaUrl}
+                alt={post.caption.slice(0, 80)}
+                className="aspect-square rounded-xl object-cover transition duration-300 group-hover:opacity-90"
+              />
+            </a>
           ))}
         </div>
       </section>
